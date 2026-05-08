@@ -1,0 +1,63 @@
+CLASS ZCL_CODE_0010 DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES IF_OO_ADT_CLASSRUN .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+CLASS ZCL_CODE_0010  IMPLEMENTATION.
+  METHOD IF_OO_ADT_CLASSRUN~MAIN.
+
+    TYPES : BEGIN OF TY_0010,
+              CLIENT TYPE MANDT,
+              CODE   TYPE C LENGTH 8,
+              ZDESC  TYPE C LENGTH 40,
+            END OF TY_0010.
+    TYPES : TY_0010_T TYPE TABLE OF TY_0010 WITH EMPTY KEY.
+
+
+    TYPES : BEGIN OF TY_0020,
+              CLIENT TYPE MANDT,
+              CODE   TYPE C LENGTH 8,
+              NAME   TYPE C LENGTH 20,
+              ZMAIL  TYPE C LENGTH 100,
+            END OF TY_0020.
+    TYPES : TY_0020_T TYPE TABLE OF TY_0020 WITH EMPTY KEY.
+
+
+    DATA(LT_DATA) = VALUE TY_0010_T( CLIENT = '100'
+                                     ( CODE = '10000001' ZDESC = 'TEST' )
+                                     ( CODE = '10000002' ZDESC = 'TEST' )
+                                   ).
+
+    DATA(LT_DATA_2) = VALUE TY_0020_T( CLIENT = '100'
+                                       ( CODE = '10000001' NAME = 'ESSE'    ZMAIL = 'ESSE@NAVER.COM' )
+                                       ( CODE = '10000002' NAME = 'DUNHILL' ZMAIL = 'DUN@NAVER.COM' )
+                                     ).
+
+    SELECT FROM ZTCODE_0010 FIELDS * INTO TABLE @DATA(LT_TEMP).
+
+    IF LT_TEMP IS INITIAL.
+      INSERT ZTCODE_0010 FROM TABLE @LT_DATA.
+    ENDIF.
+
+    SELECT FROM ZTCODE_0020 FIELDS * INTO TABLE @DATA(LT_TEMP_2).
+
+    IF LT_TEMP_2 IS INITIAL.
+      INSERT ZTCODE_0020 FROM TABLE @LT_DATA_2.
+    ENDIF.
+
+
+    IF SY-SUBRC = 0.
+      OUT->WRITE( '성공' ).
+    ELSE.
+      OUT->WRITE( '실패' ).
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.

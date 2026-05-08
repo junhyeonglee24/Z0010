@@ -1,0 +1,4 @@
+@EndUserText.label: 'ZCS_0010'
+define service ZCS_0010 {
+  expose ZCV_0010 as codemaster;
+}
